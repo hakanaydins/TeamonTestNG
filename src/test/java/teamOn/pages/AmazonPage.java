@@ -19,6 +19,15 @@ public class AmazonPage {
     public WebElement login;
 
 
+    @FindBy(xpath = "//input[@id='ap_email']")
+    public WebElement emailBox;
+
+    @FindBy(name = "password")
+    public WebElement passwordBox;
+
+    @FindBy(xpath = "//input[@id='ap_email']")
+    public WebElement emailBox;
+
 
 
 

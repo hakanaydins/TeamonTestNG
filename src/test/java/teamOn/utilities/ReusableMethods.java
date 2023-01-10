@@ -1,5 +1,6 @@
 package teamOn.utilities;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
@@ -16,5 +17,8 @@ public class ReusableMethods {
         actions.moveToElement(login).perform();
     }
 
+    public static void sendKeysInfo(String key,WebElement locator){
+        locator.sendKeys(key + Keys.ENTER);
+    }
 
 }

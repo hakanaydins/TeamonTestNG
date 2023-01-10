@@ -1,5 +1,6 @@
 package teamOn.tests;
 
+import org.openqa.selenium.Keys;
 import org.testng.annotations.Test;
 import teamOn.pages.AmazonPage;
 import teamOn.utilities.ConfigurationReader;
@@ -28,7 +29,6 @@ public class AmazonTest {
     //  Üye çıkış işlemi yapılır.
     //  Çıkış işleminin yapıldığı kontrol edilir.
 
-
     //  https://www.amazon.com.tr/ sitesi açılır.
     @Test
     public void Test() {
@@ -43,12 +43,15 @@ public class AmazonTest {
 
         ReusableMethods.moveToElement(amazonPage.login);
 
+        amazonPage.login.click();
 
-
+        ReusableMethods.sendKeysInfo(ConfigurationReader.getProperty("emailAdress"), amazonPage.emailBox) ;
 
 
 
     }
+
+
 }
 
 
