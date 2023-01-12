@@ -1,60 +1,83 @@
 package teamOn.tests;
 
-import org.openqa.selenium.Keys;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import teamOn.pages.AmazonPage;
-import teamOn.utilities.ConfigurationReader;
+import teamOn.utilities.ConfigReader;
 import teamOn.utilities.Driver;
 import teamOn.utilities.ReusableMethods;
 
 public class AmazonTest {
-
-    //  https://www.amazon.com.tr/ sitesi açılır.
-    //  Ana sayfanın açıldığı kontrol edilir.
-    //  Çerez tercihlerinden Çerezleri kabul et seçilir.
-    //  Siteye login olunur.
-    //  Login işlemi kontrol edilir.
-    //  Arama butonu yanındaki kategoriler tabından bilgisayar seçilir.
-    //  Bilgisayar kategorisi seçildiği kontrol edilir.
-    //  Arama alanına MSI yazılır ve arama yapılır.
-    //  Arama yapıldığı kontrol edilir.
-    //  Arama sonuçları sayfasından 2. sayfa açılır.
-    //  2. sayfanın açıldığı kontrol edilir.
-    //  Sayfadaki 2. ürün favorilere eklenir.
-    //   2. Ürünün favorilere eklendiği kontrol edilir.
-    //  Hesabım > Favori Listem sayfasına gidilir.
-    //  “Favori Listem” sayfası açıldığı kontrol edilir.
-    //  Eklenen ürün favorilerden silinir.
-    //  Silme işleminin gerçekleştiği kontrol edilir.
-    //  Üye çıkış işlemi yapılır.
-    //  Çıkış işleminin yapıldığı kontrol edilir.
-
-    //  https://www.amazon.com.tr/ sitesi açılır.
     @Test
     public void Test() {
-        Driver.getDriver().get(ConfigurationReader.getProperty("url"));
-
-
+        Driver.getDriver().get(ConfigReader.getProperty("url"));
         String homePageUrl = Driver.getDriver().getCurrentUrl();
-        ReusableMethods.pageControl(" https://www.amazon.com.tr/", homePageUrl);
-
+        ReusableMethods.pageControl("https://www.amazon.com.tr/", homePageUrl);
         AmazonPage amazonPage = new AmazonPage();
         amazonPage.cookieAccept.click();
 
-        ReusableMethods.moveToElement(amazonPage.login);
 
+        //  https://www.amazon.com.tr/ sitesi açılır.
+        ReusableMethods.moveToElement(amazonPage.login);
+        // Siteye login olunur.
         amazonPage.login.click();
 
-        ReusableMethods.sendKeysInfo(ConfigurationReader.getProperty("emailAdress"), amazonPage.emailBox) ;
+        ReusableMethods.sendKeysInfo(ConfigReader.getProperty("emailAdres"), amazonPage.emailBox);
 
+        ReusableMethods.sendKeysInfo(ConfigReader.getProperty("sifre"), amazonPage.passwordBox);
+        // Login işlemi kontrol edilir.
+
+        ReusableMethods.assertAssertTrue("gülsüm", amazonPage.loginVerify);
+
+        // Arama butonu yanındaki kategoriler tabından bilgisayar seçilir.
+        ReusableMethods.dropDown(amazonPage.select).selectByVisibleText("Bilgisayarlar");
+
+        //Bilgisayar kategorisi seçildiği kontrol edilir.
+        ReusableMethods.assertAssertTrue("Bilgisayarlar", ReusableMethods.dropDown(amazonPage.select).getFirstSelectedOption());
+        //Arama alanına MSI yazılır ve arama yapılır.
+        ReusableMethods.sendKeysInfo("MSI", amazonPage.searchBox);
+
+        //Arama yapıldığı kontrol edilir.
+
+        ReusableMethods.assertAssertTrue("MSI", amazonPage.productMSI);
+        //Arama sonuçları sayfasından 2. sayfa açılır.
+
+        ReusableMethods.javaScriptExecuter(amazonPage.javaScriptExecuterTwoPage);
+
+        // 2. sayfanın açıldığı kontrol edilir.
+        String homepageUrl = Driver.getDriver().getCurrentUrl();
+
+        Assert.assertTrue(homepageUrl.contains("page=2"));
+
+        // Sayfadaki 2. ürün favorilere eklenir.
+        amazonPage.secondProduct.click();
+        amazonPage.favoriekle.click();
+
+        //2. Ürünün favorilere eklendiği kontrol edilir.
+        ReusableMethods.assertAssertTrue("1 ürün şuraya eklendi:", amazonPage.wishList);
+
+
+        //Hesabım > Favori Listem sayfasına gidilir.
+        amazonPage.listDisplayed.click();
+
+
+        //“Favori Listem” sayfası açıldığı kontrol edilir.
+        String homepageUrl1 = Driver.getDriver().getCurrentUrl();
+        Assert.assertTrue(homepageUrl1.contains("wishlist"));
+
+
+        //Eklenen ürün favorilerden silinir.
+        amazonPage.deleteButon.click();
+
+        //Silme işleminin gerçekleştiği kontrol edilir.
+        Assert.assertTrue(amazonPage.silindi.isDisplayed());
+        //Üye çıkış işlemi yapılır.
+        ReusableMethods.moveToElement(amazonPage.login);
+        amazonPage.exitbutton.click();
+
+        //Çıkış işleminin yapıldığı kontrol edilir.
+        Assert.assertTrue(amazonPage.girisButon.isDisplayed());
 
 
     }
-
-
 }
-
-
-
-
-

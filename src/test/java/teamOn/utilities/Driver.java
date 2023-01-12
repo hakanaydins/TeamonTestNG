@@ -14,7 +14,7 @@ public class Driver {
            // properties dosyasının içerisindeki "browser" anahtarının
             //değerini getirecek--->chrome
 
-            String browser = ConfigurationReader.getProperty("browser");
+            String browser = ConfigReader.getProperty("browser");
 
             switch (browser){
                 case "chrome":
